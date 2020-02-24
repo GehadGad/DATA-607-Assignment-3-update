@@ -1,0 +1,250 @@
+---
+
+Title: "DATA 607 Assignment 3"
+
+output: html_document
+
+---
+
+
+***Gehad Gad***
+
+***February 23rd, 2020***
+
+***Assignment 3***
+
+
+```{r}
+#Import libraries and/or Packages
+
+#install.packages("tidyverse")
+#install.packages("htmlwidgets")
+library (stringr)
+library (tidyverse)
+
+```
+
+
+
+***Question 1. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"***
+
+```{r}
+#Import the data into R.
+
+majors <- read.csv ("https://github.com/fivethirtyeight/data/raw/master/college-majors/majors-list.csv")
+
+```
+
+
+
+```{r}
+#Select the major(s)the contain the word DATA.
+
+DATA = majors [grep ("DATA", majors$Major),]
+
+```
+
+
+```{r}
+#Select the major(s)the contain the word STATISTICS.
+
+
+STAT = majors [grep ("STATISTICS", majors$Major),]
+```
+
+
+```{r}
+# Combine the two togther.
+
+Data_Stat = rbind (DATA, STAT)
+```
+
+
+***Question 2. Write code that transforms the data below:***
+
+[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+
+[13] "olive"        "salal berry"
+
+***Into a format like this:***
+
+c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+
+
+```{r}
+# We will create an array for all the item listed.
+
+Array = array (c("bell pepper", "bilberry",   "blackberry",  "blood orange", 
+"blueberry",  "cantaloupe" ,  "chili, pepper","cloudberry",  
+"elderberry",   "lime", "lychee", "mulberry", 
+"olive",    "salal berry"))
+
+```
+
+
+#Array
+
+#[1] "bell pepper"   "bilberry"      "blackberry"    "blood orange" 
+#[5] "blueberry"     "cantaloupe"    "chili, pepper" "cloudberry"   
+#[9] "elderberry"    "lime"          "lychee"        "mulberry"     
+#[13] "olive"         "salal berry" 
+
+
+```{r}
+#Create change the array to a vector and display the vector.
+
+Vector = as.vector (Array)
+
+dput(Vector)
+
+```
+ 
+ 
+ 
+
+***Question3. Describe, in words, what these expressions will match:***
+
+
+***(.)\1\1***
+
+
+
+```{r}
+
+#The same character appearing three times in a row. E.g. "aaa"
+
+EX1= '(.)\1\1'
+
+test1 = c('aaa','"faar"', "aaa", 'lane','"laan"')
+
+str_view(test1, EX1)
+
+```
+
+
+
+***"(.)(.)\\2\\1"***
+
+
+```{r}
+#A pair of characters followed by the same pair of characters in reversed order. E.g. "abba".
+
+exp2 = '"(.)(.)\\2\\1"'
+
+test2 = c('John','"Nelly"', "abba", 'rain','"Sky"')
+
+str_view_all(test2, exp2)
+
+```
+
+
+
+***(..)\1***
+
+
+```{r}
+#Any two characters repeated. E.g. "lala".
+
+exp3 = '(..)\1'
+
+test3 = c('lala','"jump"', 'fun','"Sky"')
+
+str_view(test3, exp3)
+
+```
+
+
+***"(.).\\1.\\1"***
+
+```{r}
+#A character followed by any character, the original character, any other character, the original character again. E.g. "abaca", "b8b.b".
+
+exp4 = '"(.).\\1.\\1"'
+
+test4 = c('abaca','"leave"', 'green','"tree"')
+
+str_view(test4, exp4)
+
+```
+
+
+***"(.)(.)(.).*\\3\\2\\1"***
+
+
+```{r}
+#Three characters followed by zero or more characters of any kind followed by the same three characters but in reverse order. E.g. "abcsgasgddsadgsdgcba" or "abccba" or "abc1cba".
+
+
+exp5 = '"(.)(.)(.).*\\3\\2\\1"'
+
+test5 = c('abccba','"fall"', 'lane','"brain"')
+
+str_view(test5, exp5)
+
+
+```
+
+
+
+
+
+***Question 4.Construct regular expressions to match words that:***
+
+***1. Start and end with the same character.***
+
+
+```{r}
+
+x1 <- c("sales", "saults", "scalps", "shapes", "scoop")
+
+str_view (x1, "^s")
+
+```
+
+
+
+
+```{r}
+str_view (x1, "s$")
+
+```
+
+***Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.)***
+
+```{r}
+x2 <- c("shushing", "sharpshooter", "crosshatch", "sharp")
+  
+str_view (x2, " sh+")
+
+str_count (x2, "sh")
+  
+  
+```
+
+***Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.)***
+
+```{r}
+
+x3 <- c ("cheese", "deeper", "breeze", "Green")
+
+str_view (x3, "ee+")
+
+for (i in x3){count = str_count (i, "e")   
+if (count >= 3){  print(i)}}
+
+```
+
+
+
+```{r}
+regex_expr = '"(.)(.)\\2\\1"'
+
+test_cases = c('anna','"anna"', 'Maria','""','"able was I ere I saw hannah"')
+
+str_view_all(test_cases, regex_expr)
+```
+
